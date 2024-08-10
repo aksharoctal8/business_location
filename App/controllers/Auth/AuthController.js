@@ -1,7 +1,6 @@
 import User from "../../models/User.js";
 import bcrypt from 'bcrypt';
 import jsonwebtoken from "jsonwebtoken";
-import mongoose from "mongoose";
 import { validateLogin } from '../../Request/AuthRequest.js'
 import _ from 'lodash'
 
@@ -11,6 +10,9 @@ const register = async (req, res) => {
         if(error){
             return res.status(400).send({error: error.details[0].message});  
         }
+        
+        let checkUser = await User.findOne({ email: req.body.email });
+        if(checkUser) return res.status(200).json({message:'User alerdy Exist..!'})
         const input = _.pick(req.body, ['name', 'email', 'password']);
         input['password'] = await bcrypt.hash(input['password'], 10);
         let AdminRecord = await User.create(input);
@@ -32,29 +34,16 @@ const login = async (req, res) => {
         console.log("pass", isPassowrdCorrent);
         if (!isPassowrdCorrent) return res.json({ message: 'Password incorrect' });
         let token = jsonwebtoken.sign({ uId: user._id }, 'user', { expiresIn: '1h' });
-        return res.status(200).json({ mes: 'Login is success', status: 1, at: token });
+        return res.status(200).json({ mes: 'Login is success', status: 1, userToken: token });
     } catch (error) {
         console.log(error);
         return res.status(400).json({ message: "error..", status: 0 })
     }
 }
-const viewProfile = async (req, res) => {
-    try {
-        const userId = new mongoose.Types.ObjectId(req.user.id);
 
-        let findUser = await User.findById(userId);  
-        console.log(findUser);
-
-
-
-    } catch (error) {
-        console.log(error);
-        return res.status(400).json({ message: "error..", status: 0 })
-    }
-}
 
 export default {
     register,
     login,
-    viewProfile
+    
 }
