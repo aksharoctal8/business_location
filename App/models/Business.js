@@ -1,6 +1,6 @@
-import {model,Schema} from 'mongoose'
+import {model,Schema,mongoose} from 'mongoose'
 
-export const UserSchema = new Schema({
+export const BusinessSchema = new Schema({
     username:{type:String,required:true},
     email:{type:String,required:true},
     password:{type:String,required:true},     
@@ -10,4 +10,4 @@ export const UserSchema = new Schema({
     timestamps:true
 })
 
-export default model('User',UserSchema)
+export default model('Business',BusinessSchema)
