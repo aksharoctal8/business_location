@@ -7,7 +7,7 @@ const profile = async (req, res) => {
     try {
       const userId = await getUserLoginId(req); // Add await here
     //   console.log("user", userId);
-      const userProfile = await User.findById(userId).select('_id name email');
+      const userProfile = await User.findById(userId).select('_id name email ');
     //   console.log("profile", userProfile);
       if (!userProfile) {
         return res.status(404).json({ message: "User not found" });

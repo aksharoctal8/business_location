@@ -2,6 +2,7 @@ import User from "../../models/User.js";
 import bcrypt from 'bcrypt';
 import jsonwebtoken from "jsonwebtoken";
 import { validateLogin } from '../../Request/AuthRequest.js'
+import Business from "../../models/Business.js";
 import _ from 'lodash'
 
 const register = async (req, res) => {
@@ -17,9 +18,14 @@ const register = async (req, res) => {
         input['password'] = await bcrypt.hash(input['password'], 10);
         let AdminRecord = await User.create(input);
         if (AdminRecord) {
+            let reg  = await Business.findById(req.id);
+            console.log(reg);
+            
+            reg.mangerids.push(managerdata.id);
+            await Admin.findByIdAndUpdate(req.id,reg);
             return res.status(200).json({ message: "register..", data: AdminRecord, status: 1 })
         } else {
-            return res.status(200).json({ message: "register..", status: 0 })
+            return res.status(200).json({ message: "register error..", status: 0 })
         }
     } catch (error) {
         console.log(error);
