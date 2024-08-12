@@ -3,26 +3,11 @@ import { getUserLoginId } from "../../Helper/Helper.js";
 
 //User Profile..
 const profile = async (req, res) => {
-<<<<<<< HEAD
   try {
     const userId = await getUserLoginId(req);
     const userProfile = await User.findById(userId).select('_id name email')
     if (!userProfile) {
       return res.status(404).json({ message: "User not found" });
-=======
-    try {
-      const userId = await getUserLoginId(req); // Add await here
-    //   console.log("user", userId);
-      const userProfile = await User.findById(userId).select('_id name email ');
-    //   console.log("profile", userProfile);
-      if (!userProfile) {
-        return res.status(404).json({ message: "User not found" });
-      }
-      res.json({profie:userProfile});
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Error fetching profile" });
->>>>>>> d8bad99e7c46ce2678566c839b3c62dd86b5b6ee
     }
     res.json({ profie: userProfile });
   } catch (error) {
@@ -30,7 +15,7 @@ const profile = async (req, res) => {
     return res.status(500).json({ message: "Error fetching profile" });
   }
 };
-//UPdate User Profile
+//Upadate User Profile
 const UpdateProfile = async (req, res) => {
   try {
     const userId = await getUserLoginId(req);
