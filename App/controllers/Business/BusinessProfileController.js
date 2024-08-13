@@ -11,7 +11,6 @@ const profile = async (req, res) => {
 const UpdateProfile = async (req, res) => {
   try {
     const userId = await getUserLoginId(req);
-    // let user = await User.findByIdAndUpdate(userId,req.body);
     let strore = await Business.findOne({ user: userId });
     strore.name = req.body.name;
     let updateStrore = await strore.save()
