@@ -15,11 +15,36 @@ const profile = async (req, res) => {
     return res.status(500).json({ message: "Error fetching profile" });
   }
 };
+const getprofileById = async(req,res)=>{
+  try {
+    const userProfile = await User.findById(req.params.id).select('_id name email')
+    if (!userProfile) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({ profie: userProfile });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error fetching profile" });
+  }
+}
 //Upadate User Profile
 const UpdateProfile = async (req, res) => {
   try {
     const userId = await getUserLoginId(req);
     let user = await User.findById(userId);
+    user.name = req.body.name;
+    user.email = req.body.email;
+    let updateusr = await user.save()
+    return res.status(200).json({ message: "Profile update successfully", data: updateusr });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: 'Error editing Profile' })
+  }
+}
+const UpdateProfileById = async (req, res) => {
+  try {
+    const userId = await getUserLoginId(req);
+    let user = await User.findById(req.params.id);
     user.name = req.body.name;
     user.email = req.body.email;
     let updateusr = await user.save()
@@ -44,9 +69,26 @@ const DeleteeProfile = async (req, res) => {
     return res.status(400).json({ message: "Error Delete Profile" })
   }
 }
+const DeleteeProfileById = async (req, res) => {
+  try {
+    const userId = await getUserLoginId(req);
+    let DeleteeProfile = await User.findByIdAndDelete(req.params.id)
+    if (DeleteeProfile) {
+      return res.status(200).json({ message: "Profile Delete successfully", data: DeleteeProfile })
+    } else {
+      return res.status(200).json({ message: "Profile can't Delete", data: DeleteeProfile })
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: "Error Delete Profile" })
+  }
+}
 
 export default {
   profile,
+  getprofileById,
   UpdateProfile,
-  DeleteeProfile
+  UpdateProfileById,
+  DeleteeProfile,
+  DeleteeProfileById
 };

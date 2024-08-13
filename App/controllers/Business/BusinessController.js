@@ -17,9 +17,9 @@ const store = async (req, res) => {
         input['user'] = await getUserLoginId(req);
         let businessRecord = await Business.create(input)
         if (businessRecord) {
-            return res.status(200).json({ message: "The Business create successfully.", data: businessRecord, status: 1 });
+            return res.status(200).json({ message: "The Business created successfully.", data: businessRecord, status: 1 });
         } else {
-            return res.status(200).json({ message: "The Business can't create." });
+            return res.status(200).json({ message: "Failed to create the business." });
         }
     } catch (error) {
         console.log(error);
